@@ -164,6 +164,26 @@ app.post("/movies/:movieId", async (req, res) => {
   }
 })
 
+async function deleteMovie(movieId) {
+  try {
+    const deleteMovie = await Movie.findByIdAndDelete(movieId);
+    return deleteMovie;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+app.delete("/movies/:movieId", async (req,res) => {
+  try {
+    const deletedMovie = await deleteMovie(req.params.movieId);
+    if(deletedMovie) {
+      res.status(200).json({message: "Movie deleted successfully.", deletedMovie: deletedMovie})
+    }
+  } catch (error) {
+    res.status(500).json({error: "Failed to delete movie."})
+  }
+})
+
 const PORT = 3000;
 
 app.listen(PORT, ()=> {
